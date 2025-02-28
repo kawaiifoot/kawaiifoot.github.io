@@ -7,7 +7,7 @@ menu.addEventListener('click', function() {
 });
 
 // Signup Form Handling
-document.getElementById('signupForm')?.addEventListener('submit', function(e) {
+document.getElementById('signup-form')?.addEventListener('submit', function(e) {
   e.preventDefault();
   
   const username = document.getElementById('username').value.trim();
@@ -43,11 +43,26 @@ document.getElementById('signupForm')?.addEventListener('submit', function(e) {
   console.log('Username:', username);
   console.log('Email:', email);
   
-  // Here you would typically send data to server
-  // For now we'll just show a success message
-  errorMessage.style.color = 'green';
-  errorMessage.textContent = 'Signup successful!';
-  errorMessage.style.display = 'block';
+  // Send data to Google Apps Script
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbx-TaSOD_IxAVjFhouEUkX6SYgJZTC2u1W2JNjsdCc6I62KZ-AM4bgfufRO63F0o41k/exec';
+  const formData = new FormData();
+  formData.append('action', 'signup');
+  formData.append('username', username);
+  formData.append('email', email);
+  formData.append('password', password);
+
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(response => response.text())
+    .then(result => {
+      errorMessage.style.color = 'green';
+      errorMessage.textContent = result;
+      errorMessage.style.display = 'block';
+    })
+    .catch(error => {
+      errorMessage.style.color = 'red';
+      errorMessage.textContent = 'Error: ' + error.message;
+      errorMessage.style.display = 'block';
+    });
 });
 
 function validateEmail(email) {
