@@ -104,33 +104,32 @@
   <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar__container">
-<a href="/" id="navbar__logo"><img src="/images/aa.png" class="logo-icon" alt="Medkit Icon">Lorem Ipsum</a>
-
-          <div class="navbar__toggle" id="mobile-menu">
-            <span class="bar"></span> <span class="bar"></span>
-            <span class="bar"></span>
-          </div>
-          <ul class="navbar__menu">
-            <li class="navbar__item">
-              <a href="/" class="navbar__links">Home</a>
-            </li>
-            <li class="navbar__item">
-              <a href="/tech.html" class="navbar__links">Tech</a>
-            </li>
-            <li class="navbar__item">
-              <a href="/faq.html" class="navbar__links">FAQ</a>
-            </li>
-            <li class="navbar__btn"><a href="/signUp.html" class="button">Sign Up</a></li>
-          </ul>
+      <div class="navbar__container">
+        <a href="/" id="navbar__logo"><img src="/images/aa.png" class="logo-icon" alt="Medkit Icon">Lorem Ipsum</a>
+        <div class="navbar__toggle" id="mobile-menu">
+          <span class="bar"></span> <span class="bar"></span>
+          <span class="bar"></span>
         </div>
-      </nav>
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/tech.html" class="navbar__links">Tech</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/faq.html" class="navbar__links">FAQ</a>
+          </li>
+          <li class="navbar__btn"><a href="/signUp.html" class="button">Sign Up</a></li>
+        </ul>
+      </div>
+    </nav>
 
     <!-- Login Form -->
     <div class="login-container">
       <div class="form-box">
         <h2>Login</h2>
-        <form action="/submit-login" method="post">
+        <form id="login-form">
           <input type="email" name="email" placeholder="Email" required />
           <input type="password" name="password" placeholder="Password" required />
           <button type="submit">Log In</button>
@@ -138,5 +137,20 @@
         <p>Don't have an account? <a href="/signUp.html">Sign Up</a></p>
       </div>
     </div>
+
+    <script>
+      const scriptURL = 'https://script.google.com/a/macros/kanaan.sch.id/s/AKfycbw7FNo-cQ11FfqpJxOqqMiSLLPTrThLpTuayTSpb1Igf5UKfzJ5XWwKewzkyaEMUvGA/exec';
+
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.append('action', 'login');
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+          .then(response => response.text())
+          .then(result => alert(result))
+          .catch(error => console.error('Error!', error.message));
+      });
+    </script>
   </body>
 </html>

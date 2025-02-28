@@ -70,15 +70,13 @@
         color: #4CAF50;
         text-decoration: none;
       }
-
     </style>
   </head>
   <body>
-<!-- Navbar Section -->
+    <!-- Navbar Section -->
     <nav class="navbar">
       <div class="navbar__container">
-<a href="/" id="navbar__logo"><img src="images/aa.png" class="logo-icon" alt="Medkit Icon">Lorem Ipsum</a>
-
+        <a href="/" id="navbar__logo"><img src="images/aa.png" class="logo-icon" alt="Medkit Icon">Lorem Ipsum</a>
         <div class="navbar__toggle" id="mobile-menu">
           <span class="bar"></span> <span class="bar"></span>
           <span class="bar"></span>
@@ -98,22 +96,34 @@
       </div>
     </nav>
 
-
     <!-- Sign-Up Form -->
     <div class="signup-container">
       <div class="form-box">
         <h2>Sign Up</h2>
-        <form action="/login.html" method="get">
+        <form id="signup-form">
           <input type="text" id="username" name="username" placeholder="Username" required />
           <input type="email" id="email" name="email" placeholder="Email" required />
           <input type="password" id="password" name="password" placeholder="Password" required />
           <div id="error-message" style="color: red; margin: 10px 0; display: none;"></div>
           <button type="submit">Sign Up</button>
         </form>
-        <script src="app.js"></script>
-
         <p>Already have an account? <a href="/login.html">Log in</a></p>
       </div>
     </div>
+
+    <script>
+      const scriptURL = 'https://script.google.com/a/macros/kanaan.sch.id/s/AKfycbw7FNo-cQ11FfqpJxOqqMiSLLPTrThLpTuayTSpb1Igf5UKfzJ5XWwKewzkyaEMUvGA/exec';
+
+      document.getElementById('signup-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.append('action', 'signup');
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+          .then(response => response.text())
+          .then(result => alert(result))
+          .catch(error => console.error('Error!', error.message));
+      });
+    </script>
   </body>
 </html>
