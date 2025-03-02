@@ -131,18 +131,35 @@ body {
     margin-bottom: 10px;
 }
 
+.faq-item h2 {
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
 .faq-item p {
     color: #ffffff;
     line-height: 1.6;
 }
+
+.arrow {
+    display: inline-block;
+    transition: transform 0.3s ease; /* Smooth rotation transition */
+    margin-left: 10px; /* Space between question text and arrow */
+    
+}
+
 
 .faq-answer {
     display: none; /* Hide answers by default */
 }
 
 .faq-question {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Space between question text and arrow */
     cursor: pointer; /* Change cursor to pointer for questions */
 }
+
 
 
 .faq-item a {
