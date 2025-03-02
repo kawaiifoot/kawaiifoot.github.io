@@ -136,6 +136,15 @@ body {
     line-height: 1.6;
 }
 
+.faq-answer {
+    display: none; /* Hide answers by default */
+}
+
+.faq-question {
+    cursor: pointer; /* Change cursor to pointer for questions */
+}
+
+
 .faq-item a {
     color: #4a90e2;
     
