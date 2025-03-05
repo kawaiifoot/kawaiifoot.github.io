@@ -170,36 +170,36 @@ function endQuiz() {
   nextButton.classList.add("hide");
   restartButton.classList.remove("hide");
   resultDiv.classList.remove("hide");
-  let resultMessage = `<p>Your total points: ${score} / ${shuffledQuestions.length * 4}</p>`;
-  resultMessage += `<p>Thank you for taking the quiz! Based on your score, here are some recommendations:</p>`;
+  let resultMessage = `<p>Total poin anda: ${score} / ${shuffledQuestions.length * 4}</p>`;
+  resultMessage += `<p>Terima kasih telah mengikuti kuis! Berdasarkan skor Anda, berikut adalah beberapa rekomendasi:</p>`;
 
   if (score <= 10) {
     resultMessage += `
       <p>
-        If your score is 10: You seem to be quite relaxed and not easily anxious.
+        Jika skor Anda 10: Anda tampaknya cukup santai dan tidak mudah cemas.
       </p>
     `;
   } else if (score <= 20) {
     resultMessage += `
       <p>
-        If your score is between 11-20: You might experience some anxiety, but it seems manageable.
+        Jika skor Anda antara 11-20: Anda mungkin mengalami sedikit kecemasan, tetapi tampaknya dapat dikelola.
       </p>
     `;
   } else if (score <= 30) {
     resultMessage += `
       <p>
-        If your score is between 21-30: You may have moderate anxiety. Consider talking to someone about it.
+        Jika skor Anda antara 21-30: Anda mungkin mengalami kecemasan sedang. Pertimbangkan untuk berbicara dengan seseorang tentang hal ini.
       </p>
     `;
   } else {
     resultMessage += `
       <p>
-        If your score is between 31-40: You might have high anxiety. It could be helpful to seek professional advice.</li>
+        Jika skor Anda antara 31-40: Anda mungkin mengalami kecemasan tinggi. Mencari nasihat profesional bisa sangat membantu.</li>
       </p>
     `;
   }
 
-  resultMessage += `<p>Remember, it's always good to talk to someone if you're feeling overwhelmed.</p>`;
+  resultMessage += `<p>Ingat, selalu baik untuk berbicara dengan seseorang jika Anda merasa terbebani.</p>`;
 
   resultDiv.innerHTML = resultMessage;
 }
