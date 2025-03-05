@@ -655,6 +655,7 @@
 
   #footer__logo {
     margin-bottom: 2rem;
+    padding-top: 2rem;
   }
 
   .website__rights {
@@ -668,6 +669,9 @@
   .social__media--wrap {
     flex-direction: column;
   }
+  .address__container{
+    padding-top: 300px;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -678,28 +682,4 @@
   }
 }
 
-/* Mobile Responsive for About Us Section */
-@media screen and (max-width: 768px) {
-  .about-us {
-    flex-direction: column; /* Stack content vertically */
-    text-align: center; /* Center text */
-    padding: 20px; /* Adjust padding */
-  }
 
-  .about-us__content {
-    padding-right: 0; /* Remove right padding */
-    margin-bottom: 20px; /* Add margin below content */
-    margin-top: auto;
-  }
-
-  .about-us__img {
-    text-align: center; /* Center the image */
-    size: 10%;
-  }
-
-  .about-us__img img {
-    width: 50%; /* Make image responsive */
-    height: auto; /* Maintain aspect ratio */
-    
-  }
-}
