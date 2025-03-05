@@ -169,7 +169,7 @@
     height: 80px;
     z-index: 1;
     width: 100%;
-    max-width: 1300px;
+    max-width: 1100px;
     padding: 0;
   }
 
@@ -397,6 +397,9 @@
     margin-top: 1rem;
     font-size: 1.5rem;
   }
+  .main__img--container{
+    display: none;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -417,6 +420,9 @@
   .main__btn {
     padding: 12px 36px;
     margin: 2.5rem 0;
+  }
+  .main__img--container{
+    display: none;
   }
 }
 
@@ -669,9 +675,7 @@
   .social__media--wrap {
     flex-direction: column;
   }
-  .address__container{
-    padding-top: 300px;
-  }
+
 }
 
 @media screen and (max-width: 480px) {
