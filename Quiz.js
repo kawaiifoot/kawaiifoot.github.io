@@ -176,7 +176,7 @@ function endQuiz() {
   if (score <= 10) {
     resultMessage += `
       <p>
-        Skor Anda ${score}: Anda tampaknya cukup santai dan tidak mudah cemas. Anda tidak memiliki kecemasan gangguan yang cukup serius. 
+        Skor Anda 10: Anda tampaknya cukup santai dan tidak mudah cemas. Anda tidak memiliki kecemasan gangguan yang cukup serius. 
 
 Ketika anda bersosialisasi dengan orang sekitar, anda masih bisa mengendalikan emosi dan tingkat kecemasan anda.
 
@@ -187,7 +187,7 @@ Tidak perlu khawatir karena kondisi ini umum dirasakaan oleh orang lain, anda ti
   } else if (score <= 20) {
     resultMessage += `
       <p>
-        Skor Anda ${score}: Anda mungkin mengalami sedikit kecemasan, tetapi tampaknya dapat dikelola.
+        Skor Anda 11-20: Anda mungkin mengalami sedikit kecemasan, tetapi tampaknya dapat dikelola.
 
 Mungkin anda akan mudah merasakan cemas, tapi berusahalah untuk mengendalikan emosi.
 
@@ -197,7 +197,7 @@ Berusahalah untuk melatih pengendalian emosi anda, agar pengendalian emosi anda 
   } else if (score <= 30) {
     resultMessage += `
       <p>
-        Skor Anda ${score}: Anda mungkin mengalami kecemasan sedang. Pertimbangkan untuk berbicara dengan seseorang tentang hal ini.
+        Skor Anda 21-30: Anda mungkin mengalami kecemasan sedang. Pertimbangkan untuk berbicara dengan seseorang tentang hal ini.
 
 Anda akan mudah merasa cemas, cobalah untuk bercerita pada orang lain, sebelum penyakit cemas anda semakin buruk.
       </p>
@@ -205,7 +205,7 @@ Anda akan mudah merasa cemas, cobalah untuk bercerita pada orang lain, sebelum p
   } else {
     resultMessage += `
       <p>
-        Skor Anda ${score}:Anda mungkin mengalami kecemasan tinggi. Mencari nasihat profesional bisa sangat membantu.
+        Skor Anda 31-40:Anda mungkin mengalami kecemasan tinggi. Mencari nasihat profesional bisa sangat membantu.
 
 Ketika anda bersosialisasi dengan orang sekitar, anda kurang bisa mengendalikan emosi dan tingkat kecemasan anda.
 
