@@ -176,25 +176,40 @@ function endQuiz() {
   if (score <= 10) {
     resultMessage += `
       <p>
-        Jika skor Anda 10: Anda tampaknya cukup santai dan tidak mudah cemas.
+        Skor Anda ${score}: Anda tampaknya cukup santai dan tidak mudah cemas. Anda tidak memiliki kecemasan gangguan yang cukup serius. 
+
+Ketika anda bersosialisasi dengan orang sekitar, anda masih bisa mengendalikan emosi dan tingkat kecemasan anda.
+
+Tidak perlu khawatir karena kondisi ini umum dirasakaan oleh orang lain, anda tidak membutuhkan bantuan dari orang yang lebih profesional.
+
       </p>
     `;
   } else if (score <= 20) {
     resultMessage += `
       <p>
-        Jika skor Anda antara 11-20: Anda mungkin mengalami sedikit kecemasan, tetapi tampaknya dapat dikelola.
+        Skor Anda ${score}: Anda mungkin mengalami sedikit kecemasan, tetapi tampaknya dapat dikelola.
+
+Mungkin anda akan mudah merasakan cemas, tapi berusahalah untuk mengendalikan emosi.
+
+Berusahalah untuk melatih pengendalian emosi anda, agar pengendalian emosi anda lebiih optimal.
       </p>
     `;
   } else if (score <= 30) {
     resultMessage += `
       <p>
-        Jika skor Anda antara 21-30: Anda mungkin mengalami kecemasan sedang. Pertimbangkan untuk berbicara dengan seseorang tentang hal ini.
+        Skor Anda ${score}: Anda mungkin mengalami kecemasan sedang. Pertimbangkan untuk berbicara dengan seseorang tentang hal ini.
+
+Anda akan mudah merasa cemas, cobalah untuk bercerita pada orang lain, sebelum penyakit cemas anda semakin buruk.
       </p>
     `;
   } else {
     resultMessage += `
       <p>
-        Jika skor Anda antara 31-40: Anda mungkin mengalami kecemasan tinggi. Mencari nasihat profesional bisa sangat membantu.</li>
+        Skor Anda ${score}:Anda mungkin mengalami kecemasan tinggi. Mencari nasihat profesional bisa sangat membantu.
+
+Ketika anda bersosialisasi dengan orang sekitar, anda kurang bisa mengendalikan emosi dan tingkat kecemasan anda.
+
+Kondisi ini perlu penanganan khusus, supaya kecemasan yang anda rasakan tidak semakin parah. Anda membutuhkan bantuan dari orang yang lebih profesional.</li>
       </p>
     `;
   }
