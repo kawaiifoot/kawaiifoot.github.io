@@ -4,39 +4,40 @@ const taskList = document.getElementById('taskList');
     let editingTask = null;
 
     function isValidDate(dateStr) {
-    
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
     const [year, month, day] = dateStr.split('-').map(Number);
     if (month < 1 || month > 12) return false;
     if (day < 1 || day > 31) return false;
-    // Check for actual date validity
     const dateObj = new Date(dateStr);
     if (
         dateObj.getFullYear() !== year ||
         dateObj.getMonth() + 1 !== month ||
         dateObj.getDate() !== day
     ) return false;
-    // Limit year to 2150
     if (year > 2150) return false;
+    // Prevent past dates
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (dateObj < today) return false;
     return true;
 }
 
     addTaskBtn.addEventListener('click', () => {
-        const title = document.getElementById('title').value.trim();
-        const deadline = document.getElementById('deadline').value;
-        const details = document.getElementById('details').value.trim();
+    const title = document.getElementById('title').value.trim();
+    const deadline = document.getElementById('deadline').value;
+    const details = document.getElementById('details').value.trim();
 
-        if (!isValidDate(deadline)) return alert("Please enter a valid date (YYYY-MM-DD).");
-        if (!title || !deadline) return alert("Please fill in the title and deadline.");
-        if (deadline.length > 10) return alert("Date format is too long.");
-        
+    if (title.length > 30) return alert("Title cannot exceed 30 characters.");
+    if (!isValidDate(deadline)) return alert("Please enter a valid date (YYYY-MM-DD).");
+    if (!title || !deadline) return alert("Please fill in the title and deadline.");
+    if (deadline.length > 10) return alert("Date format is too long.");
 
-        createTask(title, deadline, details);
+    createTask(title, deadline, details);
 
-        document.getElementById('title').value = '';
-        document.getElementById('deadline').value = '';
-        document.getElementById('details').value = '';
-    });
+    document.getElementById('title').value = '';
+    document.getElementById('deadline').value = '';
+    document.getElementById('details').value = '';
+});
 
     function createTask(title, deadline, details) {
     const task = document.createElement('div');
@@ -65,9 +66,20 @@ const taskList = document.getElementById('taskList');
 
     // Toggle details on title click
     titleSpan.addEventListener('click', () => {
-        const detailSection = task.querySelector('.task-details');
-        detailSection.style.display = detailSection.style.display === 'block' ? 'none' : 'block';
-    });
+    const detailSection = task.querySelector('.task-details');
+    const detailsTextarea = detailSection.querySelector('textarea');
+
+    const isVisible = detailSection.style.display === 'block';
+    if (isVisible) {
+       
+        detailSection.style.display = 'none';
+        detailsTextarea.style.minHeight = '160px'; 
+    } else {
+        
+        detailSection.style.display = 'block';
+        detailsTextarea.style.minHeight = '160px'; 
+    }
+});
 
     //Edit
     editBtn.addEventListener('click', () => {
@@ -79,29 +91,64 @@ const taskList = document.getElementById('taskList');
         editingTask = !isEditing ? task : null;
     });
 
-    function setEditMode(taskElem, enable) {
-        const titleSpan = taskElem.querySelector('.task-title');
-        const dateInput = taskElem.querySelector('.task-date');
-        const detailsTextarea = taskElem.querySelector('.task-details textarea');
-        const editBtn = taskElem.querySelector('.edit-btn');
-        if (enable) {
-            titleSpan.contentEditable = true;
-            dateInput.disabled = false;
-            detailsTextarea.disabled = false;
-            editBtn.textContent = 'Save';
-        } else {
-            titleSpan.contentEditable = false;
-            dateInput.disabled = true;
-            detailsTextarea.disabled = true;
-            editBtn.textContent = 'Edit';
-            //Validate date on save
-            if (!isValidDate(dateInput.value)) {
-                alert("Please enter a valid date (YYYY-MM-DD).");
-                dateInput.focus();
-                return;
-            }
+
+
+function setEditMode(taskElem, enable) {
+    const titleSpan = taskElem.querySelector('.task-title');
+    const dateInput = taskElem.querySelector('.task-date');
+    const detailsTextarea = taskElem.querySelector('.task-details textarea');
+    const editBtn = taskElem.querySelector('.edit-btn');
+
+    if (enable) {
+        titleSpan.contentEditable = true;
+        dateInput.disabled = false;
+        detailsTextarea.disabled = false;
+        editBtn.textContent = 'Save';
+
+        detailsTextarea.style.minHeight = '160px';
+
+        titleSpan.addEventListener('input', limitTitleLength);
+    } else {
+        titleSpan.contentEditable = false;
+        dateInput.disabled = true;
+        detailsTextarea.disabled = true;
+        editBtn.textContent = 'Edit';
+
+        detailsTextarea.style.minHeight = '160px';
+        titleSpan.removeEventListener('input', limitTitleLength);
+
+        if (!isValidDate(dateInput.value)) {
+            alert("Please enter a valid date (YYYY-MM-DD).");
+            dateInput.focus();
+            return;
+        }
+ 
+        if (titleSpan.textContent.length > 30) {
+            alert("Title cannot exceed 30 characters.");
+            titleSpan.focus();
+            return;
         }
     }
+
+    function limitTitleLength(e) {
+        if (titleSpan.textContent.length > 30) {
+            titleSpan.textContent = titleSpan.textContent.slice(0, 30);
+            placeCaretAtEnd(titleSpan);
+        }
+    }
+
+    function placeCaretAtEnd(el) {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+}
+
+
+
 
     //Limit date input length
     dateInput.addEventListener('input', () => {
