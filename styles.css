@@ -114,7 +114,7 @@ button:hover {
     border-radius: 6px;
     padding: 8px;
     font-size: 1rem;
-    min-height: 80px; /* Make it taller */
+    min-height: 80px; 
 }
 .delete-btn {
     background: #dc3545;
@@ -170,7 +170,7 @@ button:hover {
     background: #e1a100;
 }
 
-/* Dark mode styles */
+
 body.dark-mode {
     background: #181a20;
     color: #e4e6eb;

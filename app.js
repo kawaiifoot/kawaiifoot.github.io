@@ -15,7 +15,6 @@ const taskList = document.getElementById('taskList');
         dateObj.getDate() !== day
     ) return false;
     if (year > 2150) return false;
-    // Prevent past dates
     const today = new Date();
     today.setHours(0,0,0,0);
     if (dateObj < today) return false;
@@ -64,7 +63,6 @@ const taskList = document.getElementById('taskList');
     const editBtn = task.querySelector('.edit-btn');
     const deleteBtn = task.querySelector('.delete-btn');
 
-    // Toggle details on title click
     titleSpan.addEventListener('click', () => {
     const detailSection = task.querySelector('.task-details');
     const detailsTextarea = detailSection.querySelector('textarea');
@@ -81,7 +79,6 @@ const taskList = document.getElementById('taskList');
     }
 });
 
-    //Edit
     editBtn.addEventListener('click', () => {
         if (editingTask && editingTask !== task) {
             setEditMode(editingTask, false);
@@ -147,10 +144,6 @@ function setEditMode(taskElem, enable) {
     }
 }
 
-
-
-
-    //Limit date input length
     dateInput.addEventListener('input', () => {
         if (dateInput.value.length > 10) {
             dateInput.value = dateInput.value.slice(0, 10);
@@ -162,7 +155,7 @@ function setEditMode(taskElem, enable) {
         task.remove();
     });
 
-    //drag logic
+   
     task.addEventListener('dragstart', () => {
         draggedItem = task;
         setTimeout(() => task.classList.add('dragging'), 0);
@@ -184,7 +177,6 @@ function setEditMode(taskElem, enable) {
     taskList.appendChild(task);
 }
 
-    //dark mode toggle
     const darkModeBtn = document.getElementById('darkModeToggle');
     darkModeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
