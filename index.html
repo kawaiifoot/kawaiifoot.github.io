@@ -1,33 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Draggable Task Manager</title>
-<link rel="stylesheet" href="styles.css" />
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Welcome</title>
     
-</style>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <script>
+        // Tailwind dark mode configuration
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
 </head>
-<body>
-<div class="container">
-    <h1>Task Manager</h1>
-    <button id="darkModeToggle" class="dark-mode-btn">🌙 Dark Mode</button>
-    <div class="task-form">
-        <input type="text" id="title" placeholder="Task Title (max 30 characters)" required maxlength="30">
-        <input type="date" id="deadline" required max="2150-12-31">
-        <textarea id="details" placeholder="Task Details" rows="5"></textarea>
-        <button id="addTask">Add Task</button>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+    <!-- Main container -->
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8 flex flex-col min-h-screen">
+
+        <!-- Header Section -->
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white">TaskFlow</h1>
+            <button id="darkModeToggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200">
+                <!-- Sun icon for light mode -->
+                <svg id="sun-icon" xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600 dark:text-slate-400"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                <!-- Moon icon for dark mode -->
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden text-slate-600 dark:text-slate-400"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            </button>
+        </header>
+
+        <!-- Hero Section -->
+        <main class="flex-grow flex items-center">
+            <div class="text-center w-full">
+                <h2 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-4">Organize Your Life</h2>
+                <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8">
+                    TaskFlow helps you manage your tasks with a simple, intuitive, and beautiful interface. Drag, drop, and get things done.
+                </p>
+                <a href="app.html" class="inline-block bg-indigo-600 text-white font-semibold px-8 py-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-transform active:scale-95 text-lg">
+                    Get Started
+                </a>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-slate-500 dark:text-slate-400">
+            <p>&copy; 2024 TaskFlow. All rights reserved.</p>
+        </footer>
     </div>
-    <div class="task-list" id="taskList"></div>
-</div>
+    
+    <script>
+        // Dark Mode Toggle Logic
+        const darkModeBtn = document.getElementById('darkModeToggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
 
-<script src="app.js"></script>
-<script>
-    const todayStr = new Date().toISOString().split('T')[0];
-    document.getElementById('deadline').setAttribute('min', todayStr);
-</script>
+        darkModeBtn.addEventListener('click', () => {
+            const isDarkMode = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDarkMode);
+            updateThemeIcons(isDarkMode);
+        });
+        
+        function updateThemeIcons(isDark) {
+            if (isDark) {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        }
 
-
+        // Check for saved dark mode preference on page load
+        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (savedDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
+        updateThemeIcons(savedDarkMode);
+    </script>
 </body>
 </html>
