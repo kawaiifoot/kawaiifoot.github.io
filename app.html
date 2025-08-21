@@ -115,6 +115,38 @@
         let draggedItem = null;
         let editingTask = null;
 
+        // --- Data Persistence ---
+
+        /**
+         * Saves all current tasks from the DOM to localStorage.
+         */
+        function saveTasks() {
+            const tasks = [];
+            document.querySelectorAll('.task').forEach(taskElem => {
+                tasks.push({
+                    title: taskElem.querySelector('.task-title').textContent,
+                    deadline: taskElem.querySelector('.task-date').value,
+                    details: taskElem.querySelector('.task-details-textarea').value
+                });
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        /**
+         * Loads tasks from localStorage and populates the list.
+         */
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('tasks');
+            if (savedTasks) {
+                JSON.parse(savedTasks).forEach(task => createTask(task.title, task.deadline, task.details, false));
+            } else {
+                 // Add some sample tasks if no tasks are saved
+                createTask('Finish project proposal', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], 'Draft the main points and gather all necessary data for the Q3 proposal.');
+                createTask('Call the plumber', new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], 'The kitchen sink is leaking again. Need to schedule a visit.');
+                createTask('Buy groceries', new Date().toISOString().split('T')[0], 'Milk, bread, eggs, and cheese.');
+            }
+        }
+
         // --- Utility Functions ---
 
         /**
@@ -171,8 +203,9 @@
          * @param {string} title The title of the task.
          * @param {string} deadline The deadline of the task.
          * @param {string} details The details of the task.
+         * @param {boolean} [shouldSave=true] Whether to save the tasks list after creation.
          */
-        function createTask(title, deadline, details) {
+        function createTask(title, deadline, details, shouldSave = true) {
             const task = document.createElement('div');
             task.className = 'task bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm cursor-grab transition-all duration-200 border-l-4 border-transparent';
             task.draggable = true;
@@ -202,43 +235,32 @@
                 </div>
             `;
             
-            // Set border color based on deadline
             updateTaskBorder(task, deadline);
 
-            // --- Event Listeners for the new task ---
             const titleSpan = task.querySelector('.task-title');
-            const dateInput = task.querySelector('.task-date');
             const detailsWrapper = task.querySelector('.task-details-wrapper');
-            const detailsTextarea = task.querySelector('.task-details-textarea');
             const editBtn = task.querySelector('.edit-btn');
             const deleteBtn = task.querySelector('.delete-btn');
 
-            // Toggle details view
-            titleSpan.addEventListener('click', () => {
-                detailsWrapper.classList.toggle('hidden');
-            });
+            titleSpan.addEventListener('click', () => detailsWrapper.classList.toggle('hidden'));
 
-            // Edit button functionality
             editBtn.addEventListener('click', () => {
-                if (editingTask && editingTask !== task) {
-                    setEditMode(editingTask, false);
-                }
+                if (editingTask && editingTask !== task) setEditMode(editingTask, false);
                 const isEditing = editBtn.innerHTML.includes('save');
                 setEditMode(task, !isEditing);
                 editingTask = !isEditing ? task : null;
             });
 
-            // Delete button functionality
             deleteBtn.addEventListener('click', () => {
                 if (editingTask === task) editingTask = null;
                 task.classList.add('opacity-0', 'scale-90');
                 setTimeout(() => {
                     task.remove();
+                    saveTasks();
                     showMessage('Task deleted successfully.');
                 }, 300);
             });
 
-            // Drag and Drop functionality
             task.addEventListener('dragstart', () => {
                 draggedItem = task;
                 setTimeout(() => task.classList.add('dragging'), 0);
@@ -247,9 +269,11 @@
             task.addEventListener('dragend', () => {
                 draggedItem = null;
                 task.classList.remove('dragging');
+                saveTasks();
             });
 
             taskList.appendChild(task);
+            if (shouldSave) saveTasks();
         }
 
         /**
@@ -268,36 +292,25 @@
                 titleSpan.contentEditable = true;
                 dateInput.disabled = false;
                 detailsTextarea.disabled = false;
-                
-                editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"></path></svg>`; // Save icon
+                editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"></path></svg>`;
                 taskElem.classList.add('ring-2', 'ring-indigo-500');
                 detailsWrapper.classList.remove('hidden');
                 titleSpan.focus();
             } else {
-                // Validate before saving
                 const newTitle = titleSpan.textContent.trim();
                 const newDeadline = dateInput.value;
 
-                if (newTitle.length > 30) {
-                    showMessage("Title cannot exceed 30 characters.", true);
-                    return;
-                }
-                if (!isValidDate(newDeadline)) {
-                    showMessage("Please enter a valid future date (YYYY-MM-DD).", true);
-                    return;
-                }
-                if (!newTitle) {
-                    showMessage("Title cannot be empty.", true);
-                    return;
-                }
+                if (newTitle.length > 30) return showMessage("Title cannot exceed 30 characters.", true);
+                if (!isValidDate(newDeadline)) return showMessage("Please enter a valid future date (YYYY-MM-DD).", true);
+                if (!newTitle) return showMessage("Title cannot be empty.", true);
 
                 titleSpan.contentEditable = false;
                 dateInput.disabled = true;
                 detailsTextarea.disabled = true;
-                
-                editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>`; // Edit icon
+                editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>`;
                 taskElem.classList.remove('ring-2', 'ring-indigo-500');
                 updateTaskBorder(taskElem, newDeadline);
+                saveTasks();
                 showMessage('Task updated!');
             }
         }
@@ -315,57 +328,37 @@
             const diffTime = deadlineDate - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            if (diffDays < 0) { // Overdue
-                 taskElem.classList.add('border-red-500');
-            } else if (diffDays <= 3) { // Due soon
-                taskElem.classList.add('border-red-500');
-            } else if (diffDays <= 7) { // Due this week
-                taskElem.classList.add('border-yellow-500');
-            } else { // Far in the future
-                taskElem.classList.add('border-green-500');
-            }
+            if (diffDays < 0) taskElem.classList.add('border-red-500');
+            else if (diffDays <= 3) taskElem.classList.add('border-red-500');
+            else if (diffDays <= 7) taskElem.classList.add('border-yellow-500');
+            else taskElem.classList.add('border-green-500');
         }
 
         // --- Event Listeners ---
 
-        // Add Task Button
         addTaskBtn.addEventListener('click', () => {
             const title = document.getElementById('title').value.trim();
             const deadline = document.getElementById('deadline').value;
             const details = document.getElementById('details').value.trim();
 
-            if (title.length > 30) {
-                showMessage("Title cannot exceed 30 characters.", true);
-                return;
-            }
-            if (!isValidDate(deadline)) {
-                showMessage("Please enter a valid future date (YYYY-MM-DD).", true);
-                return;
-            }
-            if (!title) {
-                showMessage("Please fill in the title.", true);
-                return;
-            }
+            if (title.length > 30) return showMessage("Title cannot exceed 30 characters.", true);
+            if (!isValidDate(deadline)) return showMessage("Please enter a valid future date (YYYY-MM-DD).", true);
+            if (!title) return showMessage("Please fill in the title.", true);
 
             createTask(title, deadline, details);
             showMessage('Task added successfully!');
 
-            // Clear form fields
             document.getElementById('title').value = '';
             document.getElementById('deadline').value = '';
             document.getElementById('details').value = '';
         });
 
-        // Drag and Drop Logic
         taskList.addEventListener('dragover', e => {
             e.preventDefault();
             const afterElement = getDragAfterElement(taskList, e.clientY);
             if (draggedItem) {
-                if (afterElement == null) {
-                    taskList.appendChild(draggedItem);
-                } else {
-                    taskList.insertBefore(draggedItem, afterElement);
-                }
+                if (afterElement == null) taskList.appendChild(draggedItem);
+                else taskList.insertBefore(draggedItem, afterElement);
             }
         });
 
@@ -374,15 +367,11 @@
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
                 const offset = y - box.top - box.height / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
+                if (offset < 0 && offset > closest.offset) return { offset: offset, element: child };
+                else return closest;
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
 
-        // Dark Mode Toggle
         darkModeBtn.addEventListener('click', () => {
             const isDarkMode = document.documentElement.classList.toggle('dark');
             localStorage.setItem('darkMode', isDarkMode);
@@ -390,33 +379,22 @@
         });
         
         function updateThemeIcons(isDark) {
-            if (isDark) {
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-            } else {
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-            }
+            sunIcon.classList.toggle('hidden', isDark);
+            moonIcon.classList.toggle('hidden', !isDark);
         }
 
         // --- Initial Setup ---
         
-        // Set min date for deadline input to today
-        const todayStr = new Date().toISOString().split('T')[0];
-        document.getElementById('deadline').setAttribute('min', todayStr);
+        document.addEventListener('DOMContentLoaded', () => {
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('deadline').setAttribute('min', todayStr);
 
-        // Check for saved dark mode preference
-        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-        if (savedDarkMode) {
-            document.documentElement.classList.add('dark');
-        }
-        updateThemeIcons(savedDarkMode);
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (savedDarkMode) document.documentElement.classList.add('dark');
+            updateThemeIcons(savedDarkMode);
 
-        // Add some sample tasks for demonstration
-        createTask('Finish project proposal', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], 'Draft the main points and gather all necessary data for the Q3 proposal.');
-        createTask('Call the plumber', new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], 'The kitchen sink is leaking again. Need to schedule a visit.');
-        createTask('Buy groceries', new Date().toISOString().split('T')[0], 'Milk, bread, eggs, and cheese.');
-
+            loadTasks();
+        });
     </script>
 </body>
 </html>
